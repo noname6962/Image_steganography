@@ -167,3 +167,4 @@ while wybor != 3:
             print(decoded_text.replace("\\n", "\n"))
         else:
             print("Nie ma takiej opcji")
+        # zamkniecie zdjecia
