@@ -4,7 +4,7 @@ import random
 
 # suma wartosci natezenia kanalow koloru(czerwony zielony niebieski) pixeli na obszarze 4x4 wokol punktu x,y z jest podzielona przez wartosc ascii znaku kodowanego
 # funkcja zwraca kanal ktorego wynik jest najmniejszy
-def kolor_check(img_alfa, x_alfa, y_alfa, val):
+def kolor_check(img_alfa, x_alfa, y_alfa):
 
     # zmienne int do przechowywania sumy wartosci natezenia kolorow
     total_red, total_green, total_blue = 0, 0, 0
@@ -24,12 +24,12 @@ def kolor_check(img_alfa, x_alfa, y_alfa, val):
                     total_blue += blue
 
     # (suma wszystkich wartosci podzielona przez ilosc pixeli sprawdzonych)-wartosc ascii znaku kodowanego
-    # zwraca kanal ktorego wynik jest najmniejszy
-    if abs((total_red/15)-val) < abs((total_green/15)-val) and abs((total_red/15)-val) < abs((total_blue/15)-val):
+    # zwraca kanal ktorego wynik jest najblizej 100
+    if abs((total_red/15)-100) < abs((total_green/15)-100) and abs((total_red/15)-100)-100 < abs((total_blue/15)-100):
         return "red"
-    elif abs((total_green/15)-val) < abs((total_red/15)-val) and abs((total_green/15)-val) < abs((total_blue/15)-val):
+    elif abs((total_green/15)-100) < abs((total_red/15)-100) and abs((total_green/15)-100) < abs((total_blue/15)-100):
         return "green"
-    elif abs((total_blue/15)-val) < abs((total_red/15)-val) and abs((total_blue/15)-val) < abs((total_green/15)-val):
+    elif abs((total_blue/15)-100) < abs((total_red/15)-100) and abs((total_blue/15)-100) < abs((total_green/15)-100):
         return "blue"
     else:
         return 0
@@ -44,10 +44,7 @@ def kodowanie(tekst, img):
     # zakodowanie polozenia i dlugosci pozycji startowej bitu kodujacego do skrajnego pixela
     pixel_value = img.getpixel((0, 0))
     red, green, blue = pixel_value
-    red = x
-    green = y
-    blue = len(tekst)
-    img.putpixel((0, 0), (red, green, blue))
+    img.putpixel((0, 0), (x, y, blue))
 
     # petla do zakodowania tekstu
     for i in range(len(tekst)):
@@ -55,12 +52,12 @@ def kodowanie(tekst, img):
         x = x + 16
 
         # jesli pixel wyjdzie poza szerokosc obrazu to przesuniecie w dol i ustawienie x na poczatek
-        if x > img.width:
-            x = x - img.width
+        if x + 2 > img.width:
+            x = x + 2 - img.width
             y = y + 16
 
         # sprawdzenie na ktorym kanale kodujemy
-        kanal = kolor_check(img, x, y, ord(tekst[i]))
+        kanal = kolor_check(img, x, y)
 
         pixel_value = img.getpixel((x, y))
         red, green, blue = pixel_value
@@ -74,6 +71,14 @@ def kodowanie(tekst, img):
             blue = ord(tekst[i])
         img.putpixel((x, y), (red, green, blue))
 
+    # ustawienie pixela kodujacego na czarny
+    x = x + 16
+
+    if x + 2 > img.width:
+        x = x + 2 - img.width
+        y = y + 16
+    img.putpixel((x, y), (0, 0, 0))
+
 
 # funkcja dekodowania
 
@@ -83,15 +88,15 @@ def dekodowanie(img):
 
     # pobieranie polozenia i dlugosci pozycji startowej bitu kodujacego
     pixel_value = img.getpixel((0, 0))
-    x, y, dlugosc = pixel_value
+    x, y, blue = pixel_value
 
     # petla do dekodowania tekstu
-    for i in range(0, dlugosc):
-
+    # for i in range(0, dlugosc):
+    while True:
         # przesuniecie pixela kodujacego
         x = x + 16
-        if x > img.width:
-            x = x - img.width
+        if x + 2 > img.width:
+            x = x + 2 - img.width
             y = y + 16
 
         # sprawdzenie ktory kanal koduje
@@ -99,6 +104,9 @@ def dekodowanie(img):
 
         pixel_value = img.getpixel((x, y))
         red, green, blue = pixel_value
+
+        if red == 0 and green == 0 and blue == 0:
+            break
 
         # dopisanie do stringa zdekodowanego znaku
         if kanal == "red":
@@ -155,6 +163,7 @@ while wybor != 3:
         elif wybor == 2:
             # wywolanie funkcji dekodowania i wypisanie zdekodowanego tekstu
             print('tekst zakodowany w zdjeciu to:')
-            print(f'{dekodowanie(img)}')
+            decoded_text = dekodowanie(img)
+            print(decoded_text.replace("\\n", "\n"))
         else:
             print("Nie ma takiej opcji")
