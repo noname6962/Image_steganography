@@ -50,9 +50,9 @@ if uploaded_file:
             st.caption("🔒 Decoding is only supported for PNG files.")
         else:
             if st.button("🔓 Decode"):
-                decoded = html.escape(dekodowanie.dekodowanie(img.copy()))
+                decoded = dekodowanie.dekodowanie(img.copy())
                 st.subheader("Decoded Text:")
-                st.code(decoded.replace("\\n", "\n"))
+                st.code(html.escape(decoded.replace("\\n", "\n")))
 
 #coding section
     with col2:
