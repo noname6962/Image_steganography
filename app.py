@@ -23,6 +23,7 @@ st.caption("Upload a PNG or JPG image. JPG allows only encoding. Output will alw
 
 #upload box
 uploaded_file = st.file_uploader("Upload Image", type=["png", "jpg", "jpeg","PNG", "JPG", "JPEG"])
+uploaded_file = uploaded_file.type.lower()
 
 #process uploaded file
 if uploaded_file:
