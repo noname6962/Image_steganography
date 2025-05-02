@@ -1,3 +1,5 @@
+'''chooses rgb channel for coding/decoding based on color of surrounding pixels
+based on mean rgb value of pixels surrounding coding pixel returns in which channel to code next letter'''
 def color_check(img_alfa, x_alfa, y_alfa):
     total_red, total_green, total_blue = 0, 0, 0
     for x in range(x_alfa - 1, x_alfa + 1):
