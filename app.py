@@ -26,7 +26,9 @@ uploaded_file = st.file_uploader("Upload Image", type=["png", "jpg", "jpeg", "PN
 
 #process uploaded file
 if uploaded_file:
-    filename = uploaded_file.name.lower()
+    filename = uploaded_file.name
+    base_name = os.path.splitext(filename)[0]
+    ext = os.path.splitext(filename)[1].lower()
     img_format = uploaded_file.type
     img = Image.open(uploaded_file).convert("RGB")
     st.image(img, caption="Uploaded Image", use_container_width=True)
