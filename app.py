@@ -22,8 +22,8 @@ st.title("🖼️ Image Text Steganography")
 st.caption("Upload a PNG or JPG image. JPG allows only encoding. Output will always be PNG.")
 
 #upload box
-uploaded_file = st.file_uploader("Upload Image", type=["png", "jpg", "jpeg","PNG", "JPG", "JPEG"])
-
+uploaded_file = st.file_uploader("Upload Image", type=["png", "jpg", "jpeg"])
+uploaded_file = uploaded_file.name.lower()
 
 #process uploaded file
 if uploaded_file:
