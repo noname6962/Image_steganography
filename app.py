@@ -22,13 +22,16 @@ st.title("🖼️ Image Text Steganography")
 st.caption("Upload a PNG or JPG image. JPG allows only encoding. Output will always be PNG.")
 
 #upload box
-uploaded_file = st.file_uploader("Upload Image", type=["png", "jpg", "jpeg", "PNG", "JPG", "JPEG"])
+uploaded_file = st.file_uploader("Upload Image", accept_multiple_files=False)
+
+if uploaded_file:
+    ext = os.path.splitext(uploaded_file.name)[1].lower()
+    if ext not in [".png", ".jpg", ".jpeg"]:
+        st.error("Only PNG and JPG/JPEG files are supported.")
 
 #process uploaded file
 if uploaded_file:
-    filename = uploaded_file.name
-    base_name = os.path.splitext(filename)[0]
-    ext = os.path.splitext(filename)[1].lower()
+    filename = uploaded_file.name.lower()
     img_format = uploaded_file.type
     img = Image.open(uploaded_file).convert("RGB")
     st.image(img, caption="Uploaded Image", use_container_width=True)
