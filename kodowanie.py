@@ -1,6 +1,7 @@
 import color_check
 import random
 
+
 #codes given string into the photo
 def kodowanie(tekst, img):
     x = random.randint(0, 4)
