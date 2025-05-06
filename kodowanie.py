@@ -1,4 +1,5 @@
 import color_check
+import pixel_move
 import random
 
 
@@ -11,11 +12,7 @@ def kodowanie(tekst, img):
 
     #adjust coding pixel position
     for i in range(len(tekst)):
-        x = x + 16
-        if x + 2 > img.width:
-            x = x + 2 - img.width
-            y = y + 16
-
+        x,y = pixel_move.pixel_move(x, y, img.width)
         kanal = color_check.color_check(img, x, y)
         red, green, blue = img.getpixel((x, y))
 
@@ -29,10 +26,7 @@ def kodowanie(tekst, img):
         img.putpixel((x, y), (red, green, blue))
 
     #break point pixel
-    x = x + 16
-    if x + 2 > img.width:
-        x = x + 2 - img.width
-        y = y + 16
+    x,y = pixel_move.pixel_move(x, y, img.width)
     img.putpixel((x, y), (0, 0, 0))
 
     return img

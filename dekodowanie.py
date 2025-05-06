@@ -1,4 +1,5 @@
 import color_check
+import pixel_move
 
 
 #decodes string from photo
@@ -8,10 +9,7 @@ def dekodowanie(img):
 
     #adjust coding pixel postion
     while True:
-        x = x + 16
-        if x + 2 > img.width:
-            x = x + 2 - img.width
-            y = y + 16
+        x,y = pixel_move.pixel_move(x, y, img.width)
 
         kanal = color_check.color_check(img, x, y)
         red, green, blue = img.getpixel((x, y))
